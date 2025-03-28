@@ -17,10 +17,14 @@ export default $config({
   },
   async run() {
     const { vpc } = await import("./infra/vpc");
+    const { auth } = await import("./infra/auth");
     const { platform } = await import("./infra/platform");
+    await import("./infra/secrets");
+
     return {
       vpcId: vpc.id,
       platformUrl: platform.url,
+      authUrl: auth.url,
     };
   },
 });

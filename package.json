@@ -9,6 +9,8 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "sst": "3.11.3"
+    "@openauthjs/openauth": "^0.4.3",
+    "sst": "3.11.3",
+    "valibot": "^1.0.0"
   }
 }

@@ -5,9 +5,20 @@
 
 declare module "sst" {
   export interface Resource {
+    "ChainhookAuth": {
+      "type": "sst.aws.Auth"
+      "url": string
+    }
     "ChainhookPlatform": {
       "type": "sst.aws.Nextjs"
-      "url": string
+    }
+    "GithubClientId": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "GithubClientSecret": {
+      "type": "sst.sst.Secret"
+      "value": string
     }
     "chainhookVpc": {
       "bastion": string
