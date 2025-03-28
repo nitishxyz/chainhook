@@ -30,6 +30,7 @@ export default $config({
   console: {
     autodeploy: {
       target(event) {
+        // Only deploy to dev when the main branch is pushed
         if (
           event.type === "branch" &&
           event.branch === "main" &&
