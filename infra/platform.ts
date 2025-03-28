@@ -1,9 +1,9 @@
 import { vpc } from "./vpc";
 import { domains } from "./domains";
 
-export const frontend = new sst.aws.TanStackStart("ChainhookFrontend", {
-  path: "./frontend",
+export const platform = new sst.aws.Nextjs("ChainhookPlatform", {
   vpc: vpc,
+  path: "./platform",
   domain: {
     name: domains.platform,
     redirects: [`www.${domains.platform}`],

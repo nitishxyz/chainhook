@@ -17,11 +17,10 @@ export default $config({
   },
   async run() {
     const { vpc } = await import("./infra/vpc");
-    const { frontend } = await import("./infra/frontend");
-
+    const { platform } = await import("./infra/platform");
     return {
       vpcId: vpc.id,
-      frontendUrl: frontend.url,
+      platformUrl: platform.url,
     };
   },
 });

@@ -5,8 +5,8 @@
 
 declare module "sst" {
   export interface Resource {
-    "ChainhookFrontend": {
-      "type": "sst.aws.TanstackStart"
+    "ChainhookPlatform": {
+      "type": "sst.aws.Nextjs"
       "url": string
     }
     "chainhookVpc": {
