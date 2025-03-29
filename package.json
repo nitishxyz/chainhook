@@ -8,8 +8,15 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
+  "scripts": {
+    "db": "sst shell -- drizzle-kit"
+  },
   "dependencies": {
     "@openauthjs/openauth": "^0.4.3",
+    "@types/pg": "^8.11.11",
+    "drizzle-kit": "^0.30.6",
+    "drizzle-orm": "^0.41.0",
+    "pg": "^8.14.1",
     "sst": "3.11.3",
     "valibot": "^1.0.0"
   }

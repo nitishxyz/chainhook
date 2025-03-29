@@ -21,6 +21,7 @@ export default $config({
     const { auth } = await import("./infra/auth");
     const { platform } = await import("./infra/platform");
     await import("./infra/secrets");
+    await import("./infra/orm");
 
     return {
       vpcId: vpc.id,
