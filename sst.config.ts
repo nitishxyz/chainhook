@@ -24,6 +24,7 @@ export default $config({
       "./infra/secrets"
     );
     await import("./infra/orm");
+    const { helius } = await import("./infra/helius");
 
     return {
       vpcId: vpc.id,
@@ -37,6 +38,7 @@ export default $config({
       databaseId: database.id,
       githubClientId,
       githubClientSecret,
+      heliusUrl: helius.url,
     };
   },
   console: {
