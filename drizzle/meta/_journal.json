@@ -22,6 +22,20 @@
       "when": 1743235766287,
       "tag": "0002_stale_archangel",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1743254631006,
+      "tag": "0003_damp_archangel",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1743261084254,
+      "tag": "0004_red_texas_twister",
+      "breakpoints": true
     }
   ]
 }

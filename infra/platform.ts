@@ -2,12 +2,12 @@ import { vpc } from "./vpc";
 import { auth } from "./auth";
 import { database } from "./database";
 import { domains } from "./domains";
-import { heliusApiKey, heliusRpcUrl } from "./secrets";
+import { heliusApiKey, heliusRpcUrl, heliusWebhookId } from "./secrets";
 
 export const platform = new sst.aws.Nextjs("ChainhookPlatform", {
   vpc: vpc,
   path: "./platform",
-  link: [auth, database, heliusApiKey, heliusRpcUrl],
+  link: [auth, database, heliusApiKey, heliusRpcUrl, heliusWebhookId],
   domain: {
     name: domains.platform,
     redirects: [`www.${domains.platform}`],

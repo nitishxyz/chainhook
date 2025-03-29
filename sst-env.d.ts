@@ -48,6 +48,10 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
+    "HeliusWebhookId": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "chainhookVpc": {
       "bastion": string
       "type": "sst.aws.Vpc"
