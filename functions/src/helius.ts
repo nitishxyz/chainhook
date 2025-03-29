@@ -28,6 +28,8 @@ interface Transaction {
     fromUserAccount: string;
     toUserAccount: string;
   }[];
+  accountData: string;
+  instructions: string;
 }
 
 interface Subscription {
@@ -116,6 +118,7 @@ async function getRelevantSubscriptions(
         database: databaseConnections.database,
         username: databaseConnections.username,
         password: databaseConnections.password,
+        ssl: databaseConnections.sslMode,
       },
     })
     .from(indexSubscriptions)
@@ -151,7 +154,7 @@ async function processTransaction(tx: Transaction, subscription: any) {
     database: subscription.connection.database,
     user: subscription.connection.username,
     password: subscription.connection.password,
-    ssl: false,
+    ssl: subscription.connection.ssl === "disable" ? false : true,
   });
 
   try {
@@ -300,8 +303,8 @@ async function processSwap(tx: Transaction, pool: Pool, subscription: any) {
     tokenOutAmount,
     JSON.stringify(tx.nativeTransfers),
     JSON.stringify(tx.tokenTransfers),
-    null, // account_data
-    null, // instructions
+    tx.accountData,
+    tx.instructions,
     tx.signature,
   ];
 
