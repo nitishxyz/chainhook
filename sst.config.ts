@@ -20,7 +20,9 @@ export default $config({
     const { database } = await import("./infra/database");
     const { auth } = await import("./infra/auth");
     const { platform } = await import("./infra/platform");
-    await import("./infra/secrets");
+    const { githubClientId, githubClientSecret } = await import(
+      "./infra/secrets"
+    );
     await import("./infra/orm");
 
     return {
@@ -33,6 +35,8 @@ export default $config({
       databasePassword: database.password,
       databaseName: database.database,
       databaseId: database.id,
+      githubClientId,
+      githubClientSecret,
     };
   },
   console: {

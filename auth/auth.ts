@@ -11,6 +11,7 @@ import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 async function getUser(id: string) {
+  console.log("GETTING USER");
   // Get user from database and return user ID
   const user = await db.query.users.findFirst({
     where: eq(users.id, id),

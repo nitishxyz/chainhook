@@ -3,6 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.148",
     "@types/bun": "latest"
   },
   "peerDependencies": {
@@ -10,12 +11,14 @@
   },
   "scripts": {
     "db": "sst shell -- drizzle-kit",
+    "dev:tunnel": "sst tunnel --stage dev",
     "dev:db": "sst shell --stage dev -- drizzle-kit",
     "dev:studio": "sst shell --stage dev -- drizzle-kit studio"
   },
   "dependencies": {
     "@openauthjs/openauth": "^0.4.3",
     "@types/pg": "^8.11.11",
+    "aws-lambda": "^1.0.7",
     "drizzle-kit": "^0.30.6",
     "drizzle-orm": "^0.41.0",
     "pg": "^8.14.1",

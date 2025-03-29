@@ -22,6 +22,7 @@ declare module "sst" {
     }
     "ChainhookPlatform": {
       "type": "sst.aws.Nextjs"
+      "url": string
     }
     "GithubClientId": {
       "type": "sst.sst.Secret"
