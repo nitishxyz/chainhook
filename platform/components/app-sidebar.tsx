@@ -17,21 +17,6 @@ import {
 import { CreateConnectionDialog } from "@/components/dialogs/create-connection-dialog";
 import { useConnections } from "@/services/api/connections";
 
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: IconDatabase,
-    },
-  ],
-};
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: connectionsData } = useConnections();
 
