@@ -222,21 +222,54 @@ async function processSwap(tx: Transaction, pool: Pool, subscription: any) {
   const tokenTransfer = tx.tokenTransfers[0];
   console.log(`Processing swap for token: ${tokenTransfer.mint}`);
 
-  // Find the second token transfer to get token_out details
-  const tokenOutTransfer = tx.tokenTransfers.find(
-    (t) => t.mint !== tokenTransfer.mint
-  );
+  // Find amount_in and amount_out based on token transfers and native transfers
+  let amountIn = 0;
+  let amountOut = 0;
+  let tokenInAddress = null;
+  let tokenOutAddress = null;
+  let tokenInDecimals = null;
+  let tokenOutDecimals = null;
+  let tokenInAmount = null;
+  let tokenOutAmount = null;
 
-  if (!tokenOutTransfer) {
-    console.error(
-      `No matching token out transfer found for swap ${tx.signature}`
-    );
-    return;
+  // Process token transfers
+  if (tx.tokenTransfers.length >= 1) {
+    const firstTransfer = tx.tokenTransfers[0];
+    const secondTransfer = tx.tokenTransfers[1];
+
+    // First transfer is usually the token being sent (amount_in)
+    tokenInAddress = firstTransfer.mint;
+    amountIn = firstTransfer.tokenAmount;
+    tokenInDecimals = firstTransfer.tokenStandard === "Fungible" ? 6 : null;
+    tokenInAmount = firstTransfer.tokenAmount.toString();
+
+    // If there's a second token transfer, it's the token being received (amount_out)
+    if (secondTransfer) {
+      tokenOutAddress = secondTransfer.mint;
+      amountOut = secondTransfer.tokenAmount;
+      tokenOutDecimals = secondTransfer.tokenStandard === "Fungible" ? 6 : null;
+      tokenOutAmount = secondTransfer.tokenAmount.toString();
+    }
   }
 
-  console.log(
-    `Token in: ${tokenTransfer.mint}, Token out: ${tokenOutTransfer.mint}`
-  );
+  // If no token out was found, check native transfers
+  // Native transfers might be the amount out (e.g., swapping token for SOL)
+  if (!tokenOutAddress && tx.nativeTransfers.length > 0) {
+    // Find the largest native transfer that's not the fee
+    const significantTransfer = tx.nativeTransfers
+      .filter((t) => t.amount > tx.fee)
+      .sort((a, b) => b.amount - a.amount)[0];
+
+    if (significantTransfer) {
+      tokenOutAddress = "So11111111111111111111111111111111111111112"; // Native SOL mint
+      amountOut = significantTransfer.amount / 1e9; // Convert lamports to SOL
+      tokenOutDecimals = 9;
+      tokenOutAmount = significantTransfer.amount.toString();
+    }
+  }
+
+  console.log(`Token in: ${tokenInAddress}, Token out: ${tokenOutAddress}`);
+  console.log(`Amount in: ${amountIn}, Amount out: ${amountOut}`);
 
   const query = `
     INSERT INTO ${subscription.targetSchema}.${subscription.targetTable} (
@@ -257,14 +290,14 @@ async function processSwap(tx: Transaction, pool: Pool, subscription: any) {
     tx.feePayer,
     tokenTransfer.fromUserAccount,
     tx.source, // dex
-    tokenTransfer.mint, // token_in_address
-    tokenOutTransfer.mint, // token_out_address
-    tokenTransfer.tokenAmount,
-    tokenOutTransfer.tokenAmount, // amount_out
-    tokenTransfer.tokenStandard === "Fungible" ? 6 : null,
-    tokenOutTransfer.tokenStandard === "Fungible" ? 6 : null, // token_out_decimals
-    tokenTransfer.tokenAmount.toString(),
-    tokenOutTransfer.tokenAmount.toString(), // token_out_amount
+    tokenInAddress,
+    tokenOutAddress,
+    amountIn,
+    amountOut,
+    tokenInDecimals,
+    tokenOutDecimals,
+    tokenInAmount,
+    tokenOutAmount,
     JSON.stringify(tx.nativeTransfers),
     JSON.stringify(tx.tokenTransfers),
     null, // account_data
