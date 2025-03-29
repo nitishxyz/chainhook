@@ -127,7 +127,10 @@ async function getRelevantSubscriptions(
         eq(indexSubscriptions.indexTypeId, indexTypeId),
         eq(indexSubscriptions.status, "active"),
         // Check if any of the transaction addresses match the subscription's addresses
-        sql`${indexSubscriptions.addresses} && ${txAddresses}::text[]`
+        sql`${indexSubscriptions.addresses} && ARRAY[${sql.join(
+          txAddresses,
+          sql`, `
+        )}]::text[]`
       )
     );
 
