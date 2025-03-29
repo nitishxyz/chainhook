@@ -303,8 +303,8 @@ async function processSwap(tx: Transaction, pool: Pool, subscription: any) {
     tokenOutAmount,
     JSON.stringify(tx.nativeTransfers),
     JSON.stringify(tx.tokenTransfers),
-    tx.accountData,
-    tx.instructions,
+    tx.accountData ? JSON.stringify(tx.accountData) : null,
+    tx.instructions ? JSON.stringify(tx.instructions) : null,
     tx.signature,
   ];
 
