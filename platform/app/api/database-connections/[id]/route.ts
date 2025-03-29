@@ -3,11 +3,14 @@ import { auth } from "../../../actions";
 import { db } from "../../../../db";
 import { databaseConnections } from "../../../../drizzle/schema";
 import { eq, and } from "drizzle-orm";
+import { NextRequest } from "next/server";
+
+type Params = Promise<{ id: string }>;
 
 // GET /api/database-connections/[id]
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Params }
 ) {
   const subject = await auth();
   if (!subject) {
@@ -15,9 +18,10 @@ export async function GET(
   }
 
   try {
+    const { id } = await params;
     const connection = await db.query.databaseConnections.findFirst({
       where: and(
-        eq(databaseConnections.id, params.id),
+        eq(databaseConnections.id, id),
         eq(databaseConnections.userId, subject.properties.id)
       ),
     });
@@ -41,8 +45,8 @@ export async function GET(
 
 // PATCH /api/database-connections/[id]
 export async function PATCH(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Params }
 ) {
   const subject = await auth();
   if (!subject) {
@@ -50,6 +54,7 @@ export async function PATCH(
   }
 
   try {
+    const { id } = await params;
     const body = await request.json();
     const { name, host, port, username, password, database, sslMode } = body;
 
@@ -67,7 +72,7 @@ export async function PATCH(
       })
       .where(
         and(
-          eq(databaseConnections.id, params.id),
+          eq(databaseConnections.id, id),
           eq(databaseConnections.userId, subject.properties.id)
         )
       )
@@ -92,8 +97,8 @@ export async function PATCH(
 
 // DELETE /api/database-connections/[id]
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Params }
 ) {
   const subject = await auth();
   if (!subject) {
@@ -101,11 +106,12 @@ export async function DELETE(
   }
 
   try {
+    const { id } = await params;
     const connection = await db
       .delete(databaseConnections)
       .where(
         and(
-          eq(databaseConnections.id, params.id),
+          eq(databaseConnections.id, id),
           eq(databaseConnections.userId, subject.properties.id)
         )
       )

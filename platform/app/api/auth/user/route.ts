@@ -9,7 +9,7 @@ export async function GET() {
 
   return NextResponse.json({
     id: subject.properties.id,
-    name: subject.properties.name || "User",
-    email: subject.properties.email || "user@example.com",
+    username: subject.properties.username,
+    email: subject.properties.email,
   });
 }

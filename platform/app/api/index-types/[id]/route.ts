@@ -3,10 +3,13 @@ import { auth } from "../../../actions";
 import { db } from "../../../../db";
 import { indexTypes } from "../../../../drizzle/schema";
 import { eq } from "drizzle-orm";
+import { NextRequest } from "next/server";
+
+type Params = Promise<{ id: string }>;
 
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Params }
 ) {
   try {
     const subject = await auth();
@@ -14,8 +17,9 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const type = await db.query.indexTypes.findFirst({
-      where: eq(indexTypes.id, params.id),
+      where: eq(indexTypes.id, id),
     });
 
     if (!type) {

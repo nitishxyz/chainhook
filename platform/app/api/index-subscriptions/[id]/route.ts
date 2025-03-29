@@ -3,10 +3,13 @@ import { auth } from "../../../actions";
 import { db } from "../../../../db";
 import { indexSubscriptions } from "../../../../drizzle/schema";
 import { eq, and } from "drizzle-orm";
+import { NextRequest } from "next/server";
+
+type Params = Promise<{ id: string }>;
 
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Params }
 ) {
   try {
     const subject = await auth();
@@ -14,9 +17,10 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const subscription = await db.query.indexSubscriptions.findFirst({
       where: and(
-        eq(indexSubscriptions.id, params.id),
+        eq(indexSubscriptions.id, id),
         eq(indexSubscriptions.userId, subject.properties.id)
       ),
       with: {
@@ -43,8 +47,8 @@ export async function GET(
 }
 
 export async function PATCH(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Params }
 ) {
   try {
     const subject = await auth();
@@ -52,13 +56,14 @@ export async function PATCH(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const body = await request.json();
     const { status, addresses, filterCriteria } = body;
 
     // Validate subscription exists and belongs to user
     const existingSubscription = await db.query.indexSubscriptions.findFirst({
       where: and(
-        eq(indexSubscriptions.id, params.id),
+        eq(indexSubscriptions.id, id),
         eq(indexSubscriptions.userId, subject.properties.id)
       ),
     });
@@ -81,7 +86,7 @@ export async function PATCH(
       })
       .where(
         and(
-          eq(indexSubscriptions.id, params.id),
+          eq(indexSubscriptions.id, id),
           eq(indexSubscriptions.userId, subject.properties.id)
         )
       )
@@ -98,8 +103,8 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Params }
 ) {
   try {
     const subject = await auth();
@@ -107,10 +112,11 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     // Validate subscription exists and belongs to user
     const subscription = await db.query.indexSubscriptions.findFirst({
       where: and(
-        eq(indexSubscriptions.id, params.id),
+        eq(indexSubscriptions.id, id),
         eq(indexSubscriptions.userId, subject.properties.id)
       ),
     });
@@ -127,7 +133,7 @@ export async function DELETE(
       .delete(indexSubscriptions)
       .where(
         and(
-          eq(indexSubscriptions.id, params.id),
+          eq(indexSubscriptions.id, id),
           eq(indexSubscriptions.userId, subject.properties.id)
         )
       );
