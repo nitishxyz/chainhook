@@ -17,13 +17,14 @@ CREATE TABLE "database_connections" (
 --> statement-breakpoint
 CREATE TABLE "index_subscriptions" (
 	"id" varchar PRIMARY KEY NOT NULL,
+	"name" varchar NOT NULL,
 	"user_id" varchar NOT NULL,
 	"connection_id" varchar NOT NULL,
 	"index_type_id" varchar NOT NULL,
 	"status" varchar DEFAULT 'active',
 	"target_schema" varchar DEFAULT 'public',
 	"target_table" varchar NOT NULL,
-	"addresses" jsonb DEFAULT '[]'::jsonb NOT NULL,
+	"addresses" text[] DEFAULT '{}' NOT NULL,
 	"filter_criteria" jsonb,
 	"last_indexed_at" timestamp,
 	"last_error" text,
@@ -38,6 +39,16 @@ CREATE TABLE "index_types" (
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now(),
 	CONSTRAINT "index_types_name_unique" UNIQUE("name")
+);
+--> statement-breakpoint
+CREATE TABLE "users" (
+	"id" varchar PRIMARY KEY NOT NULL,
+	"username" varchar NOT NULL,
+	"email" varchar NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now(),
+	CONSTRAINT "users_username_unique" UNIQUE("username"),
+	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
 CREATE TABLE "schema_templates" (

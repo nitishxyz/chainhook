@@ -11,8 +11,10 @@
   },
   "scripts": {
     "db": "sst shell -- drizzle-kit",
+    "seed": "sst shell -- bun run db/seed/index.ts",
     "dev:tunnel": "sst tunnel --stage dev",
     "dev:db": "sst shell --stage dev -- drizzle-kit",
+    "dev:seed": "sst shell --stage dev -- bun run db/seed/index.ts",
     "dev:studio": "sst shell --stage dev -- drizzle-kit studio"
   },
   "dependencies": {

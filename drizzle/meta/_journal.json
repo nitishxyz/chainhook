@@ -5,36 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1743235151654,
-      "tag": "0000_wide_reaper",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1743235507570,
-      "tag": "0001_first_sprite",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1743235766287,
-      "tag": "0002_stale_archangel",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1743254631006,
-      "tag": "0003_damp_archangel",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1743261084254,
-      "tag": "0004_red_texas_twister",
+      "when": 1743284735520,
+      "tag": "0000_rich_nuke",
       "breakpoints": true
     }
   ]

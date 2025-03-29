@@ -21,7 +21,7 @@ export const indexSubscriptions = pgTable("index_subscriptions", {
   ),
   targetSchema: varchar("target_schema").default("public"),
   targetTable: varchar("target_table").notNull(),
-  addresses: jsonb("addresses").notNull().default([]),
+  addresses: text("addresses").array().notNull().default([]),
   filterCriteria: jsonb("filter_criteria"),
   lastIndexedAt: timestamp("last_indexed_at"),
   lastError: text("last_error"),
