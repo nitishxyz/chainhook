@@ -17,6 +17,7 @@ export default $config({
   },
   async run() {
     const { vpc } = await import("./infra/vpc");
+    const { database } = await import("./infra/database");
     const { auth } = await import("./infra/auth");
     const { platform } = await import("./infra/platform");
     await import("./infra/secrets");
@@ -25,6 +26,12 @@ export default $config({
       vpcId: vpc.id,
       platformUrl: platform.url,
       authUrl: auth.url,
+      databaseHost: database.host,
+      databasePort: database.port,
+      databaseUsername: database.username,
+      databasePassword: database.password,
+      databaseName: database.database,
+      databaseId: database.id,
     };
   },
   console: {

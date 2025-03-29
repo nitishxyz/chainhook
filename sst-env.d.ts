@@ -9,6 +9,17 @@ declare module "sst" {
       "type": "sst.aws.Auth"
       "url": string
     }
+    "ChainhookDatabase": {
+      "clusterArn": string
+      "database": string
+      "host": string
+      "password": string
+      "port": number
+      "reader": string
+      "secretArn": string
+      "type": "sst.aws.Aurora"
+      "username": string
+    }
     "ChainhookPlatform": {
       "type": "sst.aws.Nextjs"
       "url": string
