@@ -47,6 +47,7 @@ interface Subscription {
 export const handler: Handler<APIGatewayProxyEvent> = async (event) => {
   try {
     console.log("Received webhook event");
+    console.log(event.body);
     const transactions: Transaction[] = JSON.parse(event.body || "[]");
     console.log(`Processing ${transactions.length} transactions`);
 
