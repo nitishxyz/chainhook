@@ -153,6 +153,12 @@ const templates = [
     creationSql: `
       CREATE TABLE IF NOT EXISTS {schema}.{table_name} (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        signature TEXT NOT NULL,
+        slot BIGINT NOT NULL,
+        timestamp BIGINT NOT NULL,
+        source TEXT NOT NULL,
+        fee BIGINT NOT NULL,
+        fee_payer TEXT NOT NULL,
         wallet_address TEXT NOT NULL,
         dex TEXT NOT NULL,
         token_in_address TEXT NOT NULL,
@@ -160,16 +166,26 @@ const templates = [
         amount_in NUMERIC NOT NULL,
         amount_out NUMERIC NOT NULL,
         price_usd NUMERIC,
+        token_in_decimals INTEGER,
+        token_out_decimals INTEGER,
+        token_in_amount TEXT,
+        token_out_amount TEXT,
+        native_transfers JSONB,
+        token_transfers JSONB,
+        account_data JSONB,
+        instructions JSONB,
         event_signature TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT NOW(),
         updated_at TIMESTAMP DEFAULT NOW()
       );
     `,
     indexesSql: [
+      `CREATE INDEX IF NOT EXISTS {table_name}_signature_idx ON {schema}.{table_name}(signature);`,
       `CREATE INDEX IF NOT EXISTS {table_name}_wallet_address_idx ON {schema}.{table_name}(wallet_address);`,
       `CREATE INDEX IF NOT EXISTS {table_name}_token_in_address_idx ON {schema}.{table_name}(token_in_address);`,
       `CREATE INDEX IF NOT EXISTS {table_name}_token_out_address_idx ON {schema}.{table_name}(token_out_address);`,
       `CREATE INDEX IF NOT EXISTS {table_name}_dex_idx ON {schema}.{table_name}(dex);`,
+      `CREATE INDEX IF NOT EXISTS {table_name}_timestamp_idx ON {schema}.{table_name}(timestamp);`,
     ],
   },
 ];

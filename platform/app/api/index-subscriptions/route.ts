@@ -151,15 +151,6 @@ export async function POST(request: Request) {
     } finally {
       await pool.end();
     }
-
-    const allWebhooks = await helius.getAllWebhooks();
-    console.log(allWebhooks);
-
-    console.log(
-      "Getting Helius webhook",
-      webhookId,
-      Resource.HeliusApiKey.value
-    );
     // Add event and address to Helius webhook
     const webhook = await helius.getWebhookByID(webhookId);
     console.log("Helius webhook retrieved");
@@ -176,7 +167,7 @@ export async function POST(request: Request) {
         indexType[0].index_types.id as keyof typeof TransactionType
       ];
 
-    console.log(webhook.transactionTypes, transactionType);
+    console.log(transactionType);
 
     if (!webhook.transactionTypes.includes(transactionType)) {
       console.log("Adding transaction type to webhook");
