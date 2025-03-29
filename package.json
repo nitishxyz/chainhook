@@ -9,7 +9,9 @@
     "typescript": "^5.0.0"
   },
   "scripts": {
-    "db": "sst shell -- drizzle-kit"
+    "db": "sst shell -- drizzle-kit",
+    "dev:db": "sst shell --stage dev -- drizzle-kit",
+    "dev:studio": "sst shell --stage dev -- drizzle-kit studio"
   },
   "dependencies": {
     "@openauthjs/openauth": "^0.4.3",
