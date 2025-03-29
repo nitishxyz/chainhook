@@ -22,13 +22,29 @@ declare module "sst" {
     }
     "ChainhookPlatform": {
       "type": "sst.aws.Nextjs"
-      "url": string
     }
     "GithubClientId": {
       "type": "sst.sst.Secret"
       "value": string
     }
     "GithubClientSecret": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "Helius": {
+      "name": string
+      "type": "sst.aws.Function"
+      "url": string
+    }
+    "HeliusApiKey": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "HeliusRouter": {
+      "type": "sst.aws.Router"
+      "url": string
+    }
+    "HeliusRpcUrl": {
       "type": "sst.sst.Secret"
       "value": string
     }
