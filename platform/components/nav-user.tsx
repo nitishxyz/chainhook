@@ -1,7 +1,6 @@
 "use client";
 
 import { IconDotsVertical, IconLogout } from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -20,10 +19,11 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { getUser, type User } from "@/services/api/user";
+import { logout } from "@/app/actions";
 
 function NavUserClient({ username, id, email }: User) {
   const { isMobile } = useSidebar();
-  const router = useRouter();
+
   const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${id}`;
 
   return (
@@ -70,7 +70,7 @@ function NavUserClient({ username, id, email }: User) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => router.push("/api/auth/logout")}>
+            <DropdownMenuItem onClick={logout}>
               <IconLogout className="mr-2 h-4 w-4" />
               Log out
             </DropdownMenuItem>
