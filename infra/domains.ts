@@ -4,4 +4,5 @@ export const domains = {
   api: `${SUB}api.chainhook.org`,
   platform: `${SUB}chainhook.org`,
   auth: `${SUB}auth.chainhook.org`,
+  helius: `${SUB}helius.chainhook.org`,
 };
