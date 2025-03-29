@@ -11,7 +11,7 @@ export const platform = new sst.aws.Nextjs("ChainhookPlatform", {
     name: domains.platform,
     redirects: [`www.${domains.platform}`],
   },
-  buildCommand: "cd platform && npx --yes @opennextjs/aws@3.5.3 build",
+  buildCommand: "ls -la && npx --yes @opennextjs/aws@3.5.3 build",
   dev: {
     command: "npm run dev",
   },
