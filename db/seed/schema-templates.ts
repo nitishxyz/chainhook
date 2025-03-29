@@ -183,5 +183,3 @@ export async function seedSchemaTemplates() {
 
   console.log("Schema templates seeded successfully");
 }
-
-seedSchemaTemplates();

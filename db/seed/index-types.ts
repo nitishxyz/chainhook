@@ -54,5 +54,3 @@ export async function seedIndexTypes() {
 
   console.log("Index types seeded successfully");
 }
-
-seedIndexTypes();
