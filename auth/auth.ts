@@ -4,8 +4,6 @@ import { MemoryStorage } from "@openauthjs/openauth/storage/memory";
 import { subjects } from "./subjects";
 import { GithubProvider } from "@openauthjs/openauth/provider/github";
 import { Resource } from "sst";
-import { CodeProvider } from "@openauthjs/openauth/provider/code";
-import { CodeUI } from "@openauthjs/openauth/ui/code";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
@@ -54,13 +52,6 @@ const app = issuer({
   storage: MemoryStorage(),
   allow: async () => true,
   providers: {
-    code: CodeProvider(
-      CodeUI({
-        sendCode: async (email, code) => {
-          console.log(email, code);
-        },
-      })
-    ),
     github: GithubProvider({
       clientID: Resource.GithubClientId.value,
       clientSecret: Resource.GithubClientSecret.value,
@@ -68,15 +59,7 @@ const app = issuer({
     }),
   },
   success: async (ctx, value) => {
-    if (value.provider === "code") {
-      const user = await getUser(value.claims.email);
-
-      return ctx.subject("user", {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-      });
-    } else if (value.provider === "github") {
+    if (value.provider === "github") {
       const githubUser = await getGithubUser(value.tokenset.access);
 
       try {

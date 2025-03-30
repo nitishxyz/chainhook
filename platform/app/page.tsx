@@ -64,7 +64,7 @@ export default async function Home() {
               <form action={login}>
                 <Button className="relative overflow-hidden group px-6 py-2 bg-primary hover:bg-primary/90">
                   <span className="relative z-10 flex items-center gap-2">
-                    Login with OpenAuth
+                    Login with GitHub
                     <IconArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </span>
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -104,7 +104,7 @@ export default async function Home() {
                   className="relative overflow-hidden group px-8 py-6 bg-primary hover:bg-primary/90 text-lg"
                 >
                   <span className="relative z-10 flex items-center gap-2">
-                    Get Started with OpenAuth
+                    Get Started with GitHub
                     <IconArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </span>
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
