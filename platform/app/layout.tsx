@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  // metadataBase: new URL("https://chainhook.xyz"),
+  metadataBase: new URL("https://dev.chainhook.org"),
   icons: {
     icon: [
       { url: "/favicon.ico" },
@@ -69,14 +69,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://chainhook.org",
+    url: "https://dev.chainhook.org",
     title: "Chainhook - Solana Indexing Platform",
     description:
       "Build and manage Solana index subscriptions with ease. Chainhook helps you track and index on-chain data efficiently.",
     siteName: "Chainhook",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Chainhook - Solana Indexing Platform",
@@ -88,7 +88,7 @@ export const metadata: Metadata = {
     title: "Chainhook - Solana Indexing Platform",
     description:
       "Build and manage Solana index subscriptions with ease. Chainhook helps you track and index on-chain data efficiently.",
-    images: ["/og-image.png"],
+    images: ["/og-image.jpg"],
     creator: "@chainhook",
   },
   robots: {
