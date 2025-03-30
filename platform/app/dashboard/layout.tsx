@@ -1,6 +1,21 @@
+import type { Metadata } from "next";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+
+export const metadata: Metadata = {
+  title: "Overview",
+  description:
+    "Overview of your Solana index subscriptions and database connections.",
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: {
+      index: false,
+      follow: false,
+    },
+  },
+};
 
 export default function DashboardLayout({
   children,
