@@ -7,6 +7,43 @@ import { IconDatabase, IconTable } from "@tabler/icons-react";
 import { CreateConnectionDialog } from "@/components/dialogs/create-connection-dialog";
 import { CreateIndexSubscriptionDialog } from "@/components/dialogs/create-index-subscription-dialog";
 import { IndexSubscriptionsTable } from "@/components/index-subscriptions-table";
+import { Skeleton } from "@/components/ui/skeleton";
+
+function ConnectionCardSkeleton() {
+  return (
+    <div className="p-4 rounded-lg border">
+      <div className="flex items-center gap-3 mb-2">
+        <IconDatabase className="h-5 w-5 text-primary" />
+        <Skeleton className="h-5 w-32" />
+      </div>
+      <Skeleton className="h-4 w-24 mb-1" />
+      <Skeleton className="h-4 w-20" />
+    </div>
+  );
+}
+
+function SubscriptionsTableSkeleton() {
+  return (
+    <div className="rounded-md border">
+      <div className="p-4 border-b">
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-4 w-24" />
+        </div>
+      </div>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div key={i} className="p-4 border-b last:border-0">
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-4 w-24" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function Page() {
   const [selectedConnectionId, setSelectedConnectionId] = useState<
@@ -30,7 +67,11 @@ export default function Page() {
         </div>
 
         {isLoadingConnections ? (
-          <div className="text-center py-4">Loading connections...</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <ConnectionCardSkeleton key={i} />
+            ))}
+          </div>
         ) : !connectionsData?.connections?.length ? (
           <div className="text-center py-4 text-muted-foreground">
             No database connections found. Create one to get started.
@@ -74,7 +115,7 @@ export default function Page() {
           </div>
 
           {isLoadingSubscriptions ? (
-            <div className="text-center py-4">Loading subscriptions...</div>
+            <SubscriptionsTableSkeleton />
           ) : !filteredSubscriptions?.length ? (
             <div className="text-center py-4 text-muted-foreground">
               No index subscriptions found for this connection. Create one to

@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 
 export const testConnectionSchema = z.object({
@@ -123,8 +123,51 @@ export function useTestConnection() {
 }
 
 export function useCreateConnection() {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: createConnection,
+    onMutate: async (newConnection) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["connections"] });
+
+      // Snapshot the previous value
+      const previousConnections =
+        queryClient.getQueryData<ConnectionListResponse>(["connections"]);
+
+      // Optimistically update to the new value
+      if (previousConnections) {
+        queryClient.setQueryData<ConnectionListResponse>(["connections"], {
+          connections: [
+            ...previousConnections.connections,
+            {
+              id: "temp-" + Date.now(),
+              name: newConnection.name,
+              host: newConnection.host,
+              port: newConnection.port,
+              username: newConnection.username,
+              database: newConnection.database,
+              sslMode: newConnection.sslMode,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            },
+          ],
+        });
+      }
+
+      // Return a context object with the snapshotted value
+      return { previousConnections };
+    },
+    onError: (err, newConnection, context) => {
+      // If the mutation fails, use the context returned from onMutate to roll back
+      if (context?.previousConnections) {
+        queryClient.setQueryData(["connections"], context.previousConnections);
+      }
+    },
+    onSettled: () => {
+      // Always refetch after error or success to ensure we have the latest data
+      queryClient.invalidateQueries({ queryKey: ["connections"] });
+    },
   });
 }
 

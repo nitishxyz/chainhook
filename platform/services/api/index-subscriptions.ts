@@ -45,7 +45,60 @@ export function useCreateIndexSubscription() {
 
   return useMutation({
     mutationFn: createSubscription,
-    onSuccess: () => {
+    onMutate: async (newSubscription) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["index-subscriptions"] });
+
+      // Snapshot the previous value
+      const previousSubscriptions = queryClient.getQueryData<
+        IndexSubscription[]
+      >(["index-subscriptions"]);
+
+      // Optimistically update to the new value
+      if (previousSubscriptions) {
+        queryClient.setQueryData<IndexSubscription[]>(
+          ["index-subscriptions"],
+          [
+            ...previousSubscriptions,
+            {
+              id: "temp-" + Date.now(),
+              name: newSubscription.name,
+              status: "active",
+              targetSchema: "public", // Default value, will be updated by server
+              targetTable: newSubscription.targetTable,
+              addresses: newSubscription.addresses,
+              lastIndexedAt: null,
+              lastError: null,
+              createdAt: new Date().toISOString(),
+              updatedAt: null,
+              connection: {
+                id: newSubscription.connectionId,
+                name: "Loading...", // Will be updated by server
+              },
+              indexType: {
+                id: newSubscription.indexTypeId,
+                name: "Loading...", // Will be updated by server
+                description: null,
+              },
+            },
+          ]
+        );
+      }
+
+      // Return a context object with the snapshotted value
+      return { previousSubscriptions };
+    },
+    onError: (err, newSubscription, context) => {
+      // If the mutation fails, use the context returned from onMutate to roll back
+      if (context?.previousSubscriptions) {
+        queryClient.setQueryData(
+          ["index-subscriptions"],
+          context.previousSubscriptions
+        );
+      }
+    },
+    onSettled: () => {
+      // Always refetch after error or success to ensure we have the latest data
       queryClient.invalidateQueries({ queryKey: ["index-subscriptions"] });
     },
   });
@@ -120,6 +173,70 @@ export function useIndexSubscriptions() {
           description: sub.index_types.description,
         },
       })) as IndexSubscription[];
+    },
+  });
+}
+
+export function useUpdateSubscriptionAddresses() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      addresses,
+    }: {
+      id: string;
+      addresses: string[];
+    }) => {
+      const response = await fetch(`/api/index-subscriptions/${id}/addresses`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ addresses }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to update addresses");
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["index-subscriptions"] });
+    },
+  });
+}
+
+export function useRemoveSubscriptionAddresses() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      addresses,
+    }: {
+      id: string;
+      addresses: string[];
+    }) => {
+      const response = await fetch(`/api/index-subscriptions/${id}/addresses`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ addresses }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to remove addresses");
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["index-subscriptions"] });
     },
   });
 }

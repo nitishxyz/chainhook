@@ -13,13 +13,54 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
+
+function ConnectionsTableSkeleton() {
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Name</TableHead>
+          <TableHead>Host</TableHead>
+          <TableHead>Port</TableHead>
+          <TableHead>Database</TableHead>
+          <TableHead>SSL Mode</TableHead>
+          <TableHead>Actions</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {Array.from({ length: 5 }).map((_, i) => (
+          <TableRow key={i}>
+            <TableCell>
+              <div className="flex items-center gap-2">
+                <IconDatabase className="h-4 w-4 text-primary" />
+                <Skeleton className="h-4 w-32" />
+              </div>
+            </TableCell>
+            <TableCell>
+              <Skeleton className="h-4 w-24" />
+            </TableCell>
+            <TableCell>
+              <Skeleton className="h-4 w-16" />
+            </TableCell>
+            <TableCell>
+              <Skeleton className="h-4 w-24" />
+            </TableCell>
+            <TableCell>
+              <Skeleton className="h-4 w-20" />
+            </TableCell>
+            <TableCell>
+              <Skeleton className="h-8 w-8 rounded-md" />
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}
 
 export default function ConnectionsPage() {
   const { data, isLoading, error } = useConnections();
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
   if (error) {
     return <div>Error loading connections: {error.message}</div>;
@@ -37,19 +78,21 @@ export default function ConnectionsPage() {
         <CreateConnectionDialog />
       </div>
       <div className="px-4 lg:px-6">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Host</TableHead>
-              <TableHead>Port</TableHead>
-              <TableHead>Database</TableHead>
-              <TableHead>SSL Mode</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {connections.length === 0 ? (
+        {isLoading ? (
+          <ConnectionsTableSkeleton />
+        ) : connections.length === 0 ? (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Host</TableHead>
+                <TableHead>Port</TableHead>
+                <TableHead>Database</TableHead>
+                <TableHead>SSL Mode</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               <TableRow>
                 <TableCell
                   colSpan={6}
@@ -59,8 +102,22 @@ export default function ConnectionsPage() {
                   started.
                 </TableCell>
               </TableRow>
-            ) : (
-              connections.map((connection) => (
+            </TableBody>
+          </Table>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Host</TableHead>
+                <TableHead>Port</TableHead>
+                <TableHead>Database</TableHead>
+                <TableHead>SSL Mode</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {connections.map((connection) => (
                 <TableRow key={connection.id}>
                   <TableCell className="font-medium">
                     {connection.name}
@@ -73,10 +130,10 @@ export default function ConnectionsPage() {
                     <CreateIndexSubscriptionDialog />
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </div>
     </div>
   );

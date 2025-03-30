@@ -16,9 +16,23 @@ import {
 } from "@/components/ui/sidebar";
 import { CreateConnectionDialog } from "@/components/dialogs/create-connection-dialog";
 import { useConnections } from "@/services/api/connections";
+import { Skeleton } from "@/components/ui/skeleton";
+
+function ConnectionSkeleton() {
+  return (
+    <div className="p-4 rounded-lg border">
+      <div className="flex items-center gap-3 mb-2">
+        <IconDatabase className="h-5 w-5 text-primary" />
+        <Skeleton className="h-5 w-32" />
+      </div>
+      <Skeleton className="h-4 w-24 mb-1" />
+      <Skeleton className="h-4 w-20" />
+    </div>
+  );
+}
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { data: connectionsData } = useConnections();
+  const { data: connectionsData, isLoading } = useConnections();
 
   return (
     <>
@@ -42,7 +56,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <CreateConnectionDialog buttonClassName="w-full mb-4" />
 
           <div className="space-y-2 px-4">
-            {!connectionsData?.connections?.length ? (
+            {isLoading ? (
+              // Loading skeletons
+              Array.from({ length: 3 }).map((_, i) => (
+                <ConnectionSkeleton key={i} />
+              ))
+            ) : !connectionsData?.connections?.length ? (
               <div className="text-center py-4 text-muted-foreground text-sm">
                 No connections found
               </div>
