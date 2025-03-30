@@ -1,0 +1,1 @@
+ALTER TABLE "index_subscriptions" ADD COLUMN "index_count" integer DEFAULT 0;

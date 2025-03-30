@@ -166,6 +166,17 @@ async function processTransaction(tx: Transaction, subscription: any) {
     } else if (tx.type === "SWAP") {
       await processSwap(tx, pool, subscription);
     }
+
+    // Update index count and last indexed time
+    await db
+      .update(indexSubscriptions)
+      .set({
+        indexCount: sql`${indexSubscriptions.indexCount} + 1`,
+        lastIndexedAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .where(eq(indexSubscriptions.id, subscription.id));
+
     console.log(`Successfully processed transaction ${tx.signature}`);
   } catch (error) {
     console.error(`Error processing transaction ${tx.signature}:`, error);

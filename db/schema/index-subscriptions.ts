@@ -1,4 +1,11 @@
-import { pgTable, timestamp, varchar, text, jsonb } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  timestamp,
+  varchar,
+  text,
+  jsonb,
+  integer,
+} from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { users } from "./users";
 import { databaseConnections } from "./database-connections";
@@ -24,6 +31,7 @@ export const indexSubscriptions = pgTable("index_subscriptions", {
   addresses: text("addresses").array().notNull().default([]),
   filterCriteria: jsonb("filter_criteria"),
   lastIndexedAt: timestamp("last_indexed_at"),
+  indexCount: integer("index_count").default(0),
   lastError: text("last_error"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow(),

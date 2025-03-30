@@ -67,6 +67,7 @@ export function useCreateIndexSubscription() {
               targetSchema: "public", // Default value, will be updated by server
               targetTable: newSubscription.targetTable,
               addresses: newSubscription.addresses,
+              indexCount: 0,
               lastIndexedAt: null,
               lastError: null,
               createdAt: new Date().toISOString(),
@@ -112,6 +113,7 @@ export type IndexSubscription = {
   targetTable: string;
   addresses: string[];
   lastIndexedAt: string | null;
+  indexCount: number;
   lastError: string | null;
   createdAt: string;
   updatedAt: string | null;

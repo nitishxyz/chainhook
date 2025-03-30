@@ -129,7 +129,7 @@ function SubscriptionDetails({
             <span className="font-medium">Created</span>
           </div>
           <p className="text-sm text-muted-foreground">
-            {formatDistanceToNow(new Date(subscription.createdAt), {
+            {formatDistanceToNow(new Date(subscription.createdAt + "Z"), {
               addSuffix: true,
             })}
           </p>
@@ -251,6 +251,7 @@ function SubscriptionsTableSkeleton() {
             <TableHead>Index Type</TableHead>
             <TableHead>Target Table</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Index Count</TableHead>
             <TableHead>Last Indexed</TableHead>
           </TableRow>
         </TableHeader>
@@ -268,6 +269,9 @@ function SubscriptionsTableSkeleton() {
               </TableCell>
               <TableCell>
                 <Skeleton className="h-5 w-16 rounded-full" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-4 w-16" />
               </TableCell>
               <TableCell>
                 <Skeleton className="h-4 w-24" />
@@ -328,6 +332,7 @@ export function IndexSubscriptionsTable({
             <TableHead>Index Type</TableHead>
             <TableHead>Target Table</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Index Count</TableHead>
             <TableHead>Last Indexed</TableHead>
           </TableRow>
         </TableHeader>
@@ -367,14 +372,15 @@ export function IndexSubscriptionsTable({
                     {subscription.status}
                   </Badge>
                 </TableCell>
+                <TableCell>{subscription.indexCount || 0}</TableCell>
                 <TableCell>
                   {subscription.lastIndexedAt
-                    ? formatDistanceToNow(
-                        new Date(subscription.lastIndexedAt),
-                        {
+                    ? (() => {
+                        const date = new Date(subscription.lastIndexedAt + "Z");
+                        return formatDistanceToNow(date, {
                           addSuffix: true,
-                        }
-                      )
+                        });
+                      })()
                     : "Never"}
                 </TableCell>
               </TableRow>

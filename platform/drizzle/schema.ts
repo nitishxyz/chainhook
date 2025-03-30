@@ -1,7 +1,41 @@
-import { pgTable, unique, varchar, jsonb, boolean, timestamp, integer, text, foreignKey } from "drizzle-orm/pg-core"
+import { pgTable, foreignKey, varchar, text, jsonb, timestamp, integer, unique, boolean } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 
+
+export const indexSubscriptions = pgTable("index_subscriptions", {
+	id: varchar().primaryKey().notNull(),
+	name: varchar().notNull(),
+	userId: varchar("user_id").notNull(),
+	connectionId: varchar("connection_id").notNull(),
+	indexTypeId: varchar("index_type_id").notNull(),
+	status: varchar().default('active'),
+	targetSchema: varchar("target_schema").default('public'),
+	targetTable: varchar("target_table").notNull(),
+	addresses: text().array().default([""]).notNull(),
+	filterCriteria: jsonb("filter_criteria"),
+	lastIndexedAt: timestamp("last_indexed_at", { mode: 'string' }),
+	lastError: text("last_error"),
+	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow(),
+	indexCount: integer("index_count").default(0),
+}, (table) => [
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [users.id],
+			name: "index_subscriptions_user_id_users_id_fk"
+		}),
+	foreignKey({
+			columns: [table.connectionId],
+			foreignColumns: [databaseConnections.id],
+			name: "index_subscriptions_connection_id_database_connections_id_fk"
+		}),
+	foreignKey({
+			columns: [table.indexTypeId],
+			foreignColumns: [indexTypes.id],
+			name: "index_subscriptions_index_type_id_index_types_id_fk"
+		}),
+]);
 
 export const webhookEvents = pgTable("webhook_events", {
 	id: varchar().primaryKey().notNull(),
@@ -49,39 +83,6 @@ export const databaseConnections = pgTable("database_connections", {
 			columns: [table.userId],
 			foreignColumns: [users.id],
 			name: "database_connections_user_id_users_id_fk"
-		}),
-]);
-
-export const indexSubscriptions = pgTable("index_subscriptions", {
-	id: varchar().primaryKey().notNull(),
-	name: varchar().notNull(),
-	userId: varchar("user_id").notNull(),
-	connectionId: varchar("connection_id").notNull(),
-	indexTypeId: varchar("index_type_id").notNull(),
-	status: varchar().default('active'),
-	targetSchema: varchar("target_schema").default('public'),
-	targetTable: varchar("target_table").notNull(),
-	addresses: text().array().default([""]).notNull(),
-	filterCriteria: jsonb("filter_criteria"),
-	lastIndexedAt: timestamp("last_indexed_at", { mode: 'string' }),
-	lastError: text("last_error"),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
-	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow(),
-}, (table) => [
-	foreignKey({
-			columns: [table.userId],
-			foreignColumns: [users.id],
-			name: "index_subscriptions_user_id_users_id_fk"
-		}),
-	foreignKey({
-			columns: [table.connectionId],
-			foreignColumns: [databaseConnections.id],
-			name: "index_subscriptions_connection_id_database_connections_id_fk"
-		}),
-	foreignKey({
-			columns: [table.indexTypeId],
-			foreignColumns: [indexTypes.id],
-			name: "index_subscriptions_index_type_id_index_types_id_fk"
 		}),
 ]);
 
