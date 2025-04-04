@@ -76,7 +76,7 @@ export const handler: Handler<APIGatewayProxyEvent> = async (event) => {
   } catch (error) {
     console.error("Error processing webhook:", error);
     return {
-      statusCode: 500,
+      statusCode: 200,
       body: JSON.stringify({ error: "Failed to process transactions" }),
     };
   }
@@ -285,14 +285,6 @@ async function processSwap(tx: Transaction, pool: Pool, subscription: any) {
   console.log(`Token in: ${tokenInAddress}, Token out: ${tokenOutAddress}`);
   console.log(`Amount in: ${amountIn}, Amount out: ${amountOut}`);
 
-  if (!tokenInAddress || !tokenOutAddress) {
-    console.log("No token in or out found, skipping swap");
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ message: "No token in or out found" }),
-    };
-  }
-
   const query = `
     INSERT INTO ${subscription.targetSchema}.${subscription.targetTable} (
       signature, slot, timestamp, source, fee, fee_payer,
@@ -329,8 +321,4 @@ async function processSwap(tx: Transaction, pool: Pool, subscription: any) {
 
   await pool.query(query, params);
   console.log(`Inserted swap record for ${tx.signature}`);
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ message: "Swap processed successfully" }),
-  };
 }
